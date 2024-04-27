@@ -1,0 +1,9 @@
+#define INVALID_HASH_FILE -1
+#define INVALID_WORDLIST_FILE -2
+#define INVALID_HASH_TYPE -3
+#define INVALID_INPUT -4
+
+#define TRUE 1
+#define FALSE 0
+#define NUM_HASH_TYPES 10
+#define MAX_STRING_LENGTH 100

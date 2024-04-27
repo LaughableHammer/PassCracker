@@ -3,12 +3,18 @@
 #include <unistd.h>
 #include <string.h>
 
-#define INVALID_HASH_FILE -1
-#define INVALID_WORDLIST_FILE -2
-#define INVALID_HASH_TYPE -3
-#define INVALID_INPUT -4
+#include "constants.h"
+#include "hash.h"
 
-#define NUM_HASH_TYPES 10
+// #define INVALID_HASH_FILE -1
+// #define INVALID_WORDLIST_FILE -2
+// #define INVALID_HASH_TYPE -3
+// #define INVALID_INPUT -4
+
+// #define TRUE 1
+// #define FALSE 0
+// #define NUM_HASH_TYPES 10
+// #define MAX_STRING_LENGTH 100
 
 enum hash_type {LM = 1, NTLM, MD2, MD4, MD5, SHA1, SHA224, SHA256, SHA384, SHA512};
 const char *hash_names[] = {"null", "LM", "NTLM", "MD2", "MD4", "MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"};
@@ -20,6 +26,7 @@ struct input {
 
 void print_help();
 void end_program(int error_code);
+void bruteforce(FILE *hash_file, FILE *wordlist_file, int hash_type);
 
 int main(int argc, char *argv[]) {
     struct input input;
@@ -28,31 +35,31 @@ int main(int argc, char *argv[]) {
     FILE *hash_file;
     FILE *wordlist_file;
 
-    if (argc == 1) {
+    if (argc < 7) {
         print_help();
-        return 0;
+        return 1;
     }
 
     while ((option = getopt(argc, argv, ":w:i:h:")) != EOF) {
         switch (option) {
             case '?':
-                printf("Unknown option: %c\n", optopt);
+                // printf("Unknown option: %c\n", optopt);
                 print_help();
                 break;
             case 'w':
                 input.wordlist_path = optarg;
-                printf("Wordlist: %s\n", input.wordlist_path);
+                // printf("Wordlist: %s\n", input.wordlist_path);
                 break;
             case 'i':
                 input.hash_path = optarg;
-                printf("Hash: %s\n", input.hash_path);
+                // printf("Hash: %s\n", input.hash_path);
                 break;
             case 'h':
                 input.hash_type = atoi(optarg);
-                printf("Hash type: %s\n", hash_names[input.hash_type]);
+                //printf("Hash type: %s\n", hash_names[input.hash_type]);
                 break;
             case ':':
-                printf("Option -%c requires an argument\n", optopt);
+                // printf("Option -%c requires an argument\n", optopt);
                 print_help();
                 break;
         }
@@ -75,7 +82,6 @@ int main(int argc, char *argv[]) {
         bruteforce(hash_file, wordlist_file, input.hash_type);
     }
 
-
     fclose(hash_file);
     fclose(wordlist_file);
     return 0;
@@ -86,7 +92,7 @@ void print_help() {
     printf("Options:\n");
     printf("  -w <wordlist>    Specify wordlist file path\n");
     printf("  -i <hashfile>    Specify hash file path\n");
-    printf("  -h <hashtype>    Specify hash type (0-9)\n");
+    printf("  -h <hashtype>    Specify hash type (1-10)\n");
     printf("  -help            Display this help message\n");
     exit(0);
 }
@@ -112,7 +118,42 @@ void end_program(int error_code) {
 }
 
 void bruteforce(FILE *hash_file, FILE *wordlist_file, int hash_type) {
-    // function implmentation
-
-    return;
+    char word[MAX_STRING_LENGTH];
+    char hash[MAX_STRING_LENGTH];
+    int found = FALSE;
+    switch (hash_type) {
+        case LM:
+            hash_lm(hash_file, wordlist_file, word, hash, found);
+            break;
+        case NTLM:
+            hash_ntlm(hash_file, wordlist_file, word, hash, found);
+            break;
+        case MD2:
+            hash_md2(hash_file, wordlist_file, word, hash, found);
+            break;
+        case MD4:
+            hash_md4(hash_file, wordlist_file, word, hash, found);
+            break;
+        case MD5:
+            hash_md5(hash_file, wordlist_file, word, hash, found);
+            break;
+        case SHA1:
+            hash_sha1(hash_file, wordlist_file, word, hash, found);
+            break;
+        case SHA224:
+            hash_sha224(hash_file, wordlist_file, word, hash, found);
+            break;
+        case SHA256:
+            hash_sha256(hash_file, wordlist_file, word, hash, found);
+            break;
+        case SHA384:
+            hash_sha384(hash_file, wordlist_file, word, hash, found);
+            break;
+        case SHA512:
+            hash_sha512(hash_file, wordlist_file, word, hash, found);
+            break;
+        default:
+            printf("Unknown hash type: %d\n", hash_type);
+            return;
+    }
 }
