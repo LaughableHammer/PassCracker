@@ -6,16 +6,6 @@
 #include "constants.h"
 #include "hash.h"
 
-// #define INVALID_HASH_FILE -1
-// #define INVALID_WORDLIST_FILE -2
-// #define INVALID_HASH_TYPE -3
-// #define INVALID_INPUT -4
-
-// #define TRUE 1
-// #define FALSE 0
-// #define NUM_HASH_TYPES 10
-// #define MAX_STRING_LENGTH 100
-
 enum hash_type {LM = 1, NTLM, MD2, MD4, MD5, SHA1, SHA224, SHA256, SHA384, SHA512};
 const char *hash_names[] = {"null", "LM", "NTLM", "MD2", "MD4", "MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"};
 struct input {
@@ -43,23 +33,18 @@ int main(int argc, char *argv[]) {
     while ((option = getopt(argc, argv, ":w:i:h:")) != EOF) {
         switch (option) {
             case '?':
-                // printf("Unknown option: %c\n", optopt);
                 print_help();
                 break;
             case 'w':
                 input.wordlist_path = optarg;
-                // printf("Wordlist: %s\n", input.wordlist_path);
                 break;
             case 'i':
                 input.hash_path = optarg;
-                // printf("Hash: %s\n", input.hash_path);
                 break;
             case 'h':
                 input.hash_type = atoi(optarg);
-                //printf("Hash type: %s\n", hash_names[input.hash_type]);
                 break;
             case ':':
-                // printf("Option -%c requires an argument\n", optopt);
                 print_help();
                 break;
         }
