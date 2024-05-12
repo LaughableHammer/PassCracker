@@ -1,13 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "constants.h"
 #include "hash.h"
 
-enum hash_type {LM = 1, NTLM, MD2, MD4, MD5, SHA1, SHA224, SHA256, SHA384, SHA512};
-const char *hash_names[] = {"null", "LM", "NTLM", "MD2", "MD4", "MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"};
+enum hash_type {
+    LM = 1,
+    NTLM,
+    MD2,
+    MD4,
+    MD5,
+    SHA1,
+    SHA224,
+    SHA256,
+    SHA384,
+    SHA512
+};
+const char *hash_names[] = {"null",   "LM",     "NTLM",  "MD2",
+                            "MD4",    "MD5",    "SHA1",  "SHA224",
+                            "SHA256", "SHA384", "SHA512"};
 struct input {
     char *hash_path;
     char *wordlist_path;
@@ -21,7 +34,7 @@ void bruteforce(FILE *hash_file, FILE *wordlist_file, int hash_type);
 int main(int argc, char *argv[]) {
     struct input input;
     int option;
-    
+
     FILE *hash_file;
     FILE *wordlist_file;
 
@@ -50,7 +63,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    for(; optind < argc; optind++) {
+    for (; optind < argc; optind++) {
         end_program(INVALID_INPUT);
     }
 
